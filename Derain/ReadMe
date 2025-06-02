@@ -1,0 +1,65 @@
+DeRain 程式說明
+簡介
+本程式是一個基於 PyTorch 的圖像去雨工具，使用生成器模型（Generator）從圖像中移除雨滴，恢復清晰圖像。程式支援單張圖像處理、批次處理（Demo 模式）以及測試模式（計算 PSNR 和 SSIM 指標）。此外，程式會生成雨滴遮罩和中間幀作為附加輸出。
+依賴
+
+Python 3.x
+PyTorch
+OpenCV
+NumPy
+Matplotlib
+Scikit-image
+
+安裝依賴的命令：
+pip install torch torchvision opencv-python numpy matplotlib scikit-image
+
+資料集
+可選的測試資料集：https://drive.google.com/drive/folders/1e7R76s6vwUJxILOcAsthgDLPSnOrQ49K。
+包含帶雨滴的圖像和對應的真值圖像。
+
+使用方法
+1. 準備模型
+確保您有訓練好的生成器模型權重文件（例如 gen.pkl），並在程式碼中指定其路徑。
+2. 運行程式
+程式提供三種運行模式：
+單張圖像去雨
+處理單張圖像並顯示去雨前後的對比。
+model_path = 'path/to/gen.pkl'
+image_path = 'path/to/image.jpg'
+output_dir = 'path/to/output'
+
+pipeline = DeRainPipeline(model_path, device='cuda')
+pipeline.run_single_image(image_path, output_dir)
+
+Demo 模式
+處理指定目錄中的所有圖像，生成去雨圖像、雨滴遮罩和中間幀，並顯示可視化結果。
+model_path = 'path/to/gen.pkl'
+input_dir = 'path/to/input/images'
+output_dir = 'path/to/output'
+
+pipeline = DeRainPipeline(model_path, device='cuda')
+pipeline.run_demo(input_dir, output_dir)
+
+測試模式
+在測試集上運行，計算去雨圖像與真值圖像的 PSNR 和 SSIM 指標。
+model_path = 'path/to/gen.pkl'
+input_dir = 'path/to/input/images'
+gt_dir = 'path/to/ground/truth/images'
+output_dir = 'path/to/output'
+
+pipeline = DeRainPipeline(model_path, device='cuda')
+pipeline.run_test(input_dir, gt_dir, output_dir)
+
+輸出
+
+去雨圖像：移除雨滴後的圖像，保存為 PNG 或 JPG 文件。
+雨滴遮罩：標記圖像中雨滴位置的灰度圖（Demo 模式）。
+中間幀：模型處理過程中的中間結果（Demo 模式）。
+評估指標（測試模式）：PSNR 和 SSIM 值，衡量去雨效果。
+
+注意事項
+
+輸入圖像尺寸必須能被 4 整除，程式會自動裁剪以滿足要求。
+圖像以 RGB 格式處理，輸出也為 RGB 格式。
+模型假設輸入圖像像素值範圍為 [0, 1]，並在內部進行正規化處理。
+
