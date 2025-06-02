@@ -1,0 +1,13 @@
+本程式是一個基於 PyTorch 架構的圖像去雜訊（Denoising）工具，使用 DnCNN（Denoising Convolutional Neural Network）模型來移除高斯雜訊，還原清晰的圖像。
+支援處理單張圖像、多模型推論比較（σ=15/25/50），只能應用於灰階影像的品質提升與去雜訊視覺化展示。
+
+模型來源
+sigma15.pth
+
+sigma25.pth
+
+sigma50.pth
+
+這些為預訓練模型，是從 SaoYan/DnCNN-PyTorch GitHub下載 。
+
+本程式提供單一圖片推論與三模型同時比較推論功能
